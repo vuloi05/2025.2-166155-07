@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 // Main branch version
-=======
-// Conflict branch version 
->>>>>>> conflict-branch-loi
 
 import java.util.Scanner;
 
