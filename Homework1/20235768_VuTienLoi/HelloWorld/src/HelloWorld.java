@@ -7,9 +7,8 @@ public class HelloWorld {
         System.out.print("Please enter your name: ");
         String name = scanner.nextLine();
 
-        System.out.println("Hello, " + name + "!");
+        System.out.println("Hello, " + name + "! Welcome to Java Programming!");
 
-        System.out.println("Welcome to Homework01!");
 
         scanner.close();
     }
