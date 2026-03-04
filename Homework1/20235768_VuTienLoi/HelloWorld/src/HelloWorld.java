@@ -9,6 +9,8 @@ public class HelloWorld {
 
         System.out.println("Hello, " + name + "!");
 
+        System.out.println("Welcome to Homework01!");
+
         scanner.close();
     }
 }
