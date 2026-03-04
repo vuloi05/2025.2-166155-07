@@ -12,6 +12,7 @@ public class HelloWorld {
         System.out.println("Hello, " + name + "!");
 
         System.out.println("This is from main working branch!");
+        System.out.println("This is from feature branch!");
 
         scanner.close();
     }
