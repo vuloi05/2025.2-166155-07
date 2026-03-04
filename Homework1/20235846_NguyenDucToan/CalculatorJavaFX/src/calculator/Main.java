@@ -17,9 +17,13 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+        primaryStage.toFront();
+        primaryStage.requestFocus();
     }
 
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }
