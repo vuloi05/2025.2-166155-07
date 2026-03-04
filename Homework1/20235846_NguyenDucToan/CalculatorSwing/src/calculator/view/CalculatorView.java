@@ -15,7 +15,7 @@ public class CalculatorView extends JFrame {
     public CalculatorView() {
         super("Calculator - Swing MVC");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(500, 160);
+        this.setSize(600, 180);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
 
