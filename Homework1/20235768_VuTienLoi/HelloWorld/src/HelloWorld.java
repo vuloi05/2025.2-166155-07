@@ -1,4 +1,4 @@
-// Conflict branch version
+// Main branch version
 
 import java.util.Scanner;
 
