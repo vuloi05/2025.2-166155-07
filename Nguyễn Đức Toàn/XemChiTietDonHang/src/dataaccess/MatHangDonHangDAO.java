@@ -1,13 +1,4 @@
-// ============================================================
 // Tac gia    : Nguyen Duc Toan - 20235846
-// Ten file   : MatHangDonHangDAO.java
-// Goi        : dataaccess (tang DataAccess)
-// Mo ta      : DAO truy xuat danh sach mat hang theo ma don hang.
-//              Khop Bieu do lop thiet ke BT6 - phuong thuc findByOrderCode().
-//              BT6: viec lay danh sach mat hang da chuyen tu entity DonHang
-//              sang DAO nay (bo DonHang.layDSMatHang()).
-// Phu thuoc  : domainmodel.MatHangDonHang, domainmodel.Site
-// ============================================================
 package dataaccess;
 
 import java.util.ArrayList;
@@ -19,15 +10,8 @@ import java.util.Map;
 import domainmodel.MatHangDonHang;
 import domainmodel.Site;
 
-/**
- * DAO cho cac dong mat hang trong don hang (du lieu gia lap - mock data).
- *
- * <p>Tuong ung class MatHangDonHangDAO trong Bieu do lop BT6,
- * voi phuong thuc findByOrderCode(maDonHang): List.</p>
- */
 public class MatHangDonHangDAO {
 
-    /** Ban do: maDonHang -> danh sach mat hang cua don hang do. */
     private final Map<String, List<MatHangDonHang>> mockData;
 
     public MatHangDonHangDAO() {
@@ -61,14 +45,6 @@ public class MatHangDonHangDAO {
                 new MatHangDonHang("MH009", "Pin Lithium 18650", 400, "Vien", Site.PT_TAU))));
     }
 
-    /**
-     * Lay danh sach mat hang cua mot don hang theo ma don.
-     *
-     * <p>Tuong ung findByOrderCode(maDonHang): List trong Bieu do lop BT6.</p>
-     *
-     * @param maDonHang ma don hang
-     * @return danh sach mat hang; danh sach rong neu don khong co mat hang nao
-     */
     public List<MatHangDonHang> findByOrderCode(String maDonHang) {
         List<MatHangDonHang> ds = mockData.get(maDonHang);
         if (ds == null) {
