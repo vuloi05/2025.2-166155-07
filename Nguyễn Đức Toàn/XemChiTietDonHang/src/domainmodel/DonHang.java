@@ -1,33 +1,10 @@
-// ============================================================
 // Tac gia    : Nguyen Duc Toan - 20235846
-// Ten file   : DonHang.java
-// Goi        : domainmodel (tang DomainModel)
-// Mo ta      : Lop thuc the <<entity>> dai dien cho mot Don hang.
-//              Khop "Bieu do lop muc thiet ke BT6" (muc 13 SRS):
-//              entity giu du lieu + trang thai, KHONG truy xuat CSDL.
-// Phu thuoc  : java.util.Date
-// ============================================================
 package domainmodel;
 
 import java.util.Date;
 
-/**
- * Thuc the Don hang (UC006 - Xem chi tiet don hang).
- *
- * <p>Tuong ung class &lt;&lt;entity&gt;&gt; DonHang trong Bieu do lop thiet ke BT6:</p>
- * <ul>
- *   <li>Thuoc tinh: maDonHang, maSite, tenSite, soLuongMatHang,
- *       phuongTienVC, ngayTao, trangThai</li>
- *   <li>Hanh vi: laDaHuy() — Information Expert (GRASP): entity la chuyen gia
- *       ve trang thai cua chinh no, nen tu tra loi "da bi huy hay chua".</li>
- * </ul>
- *
- * <p>BT6 da BO phuong thuc layDSMatHang() khoi entity (viec truy xuat danh sach
- * mat hang da chuyen sang MatHangDonHangDAO).</p>
- */
 public class DonHang {
 
-    /** Ma trang thai don hang da bi huy (dung cho laDaHuy()). */
     public static final String TRANG_THAI_DA_HUY = "DA_HUY";
 
     private String maDonHang;
@@ -54,16 +31,6 @@ public class DonHang {
         this.trangThai = trangThai;
     }
 
-    /**
-     * Kiem tra don hang da bi huy hay chua.
-     *
-     * <p>Tuong ung hanh vi laDaHuy(): boolean trong Bieu do lop BT6.
-     * Day la diem cai tien so voi BT5 (truoc do logic kiem tra trang thai
-     * nam o Service - kiemTraTrangThai()). Theo Information Expert,
-     * entity tu kiem tra trang thai cua chinh no.</p>
-     *
-     * @return true neu trang thai = "DA_HUY", nguoc lai false
-     */
     public boolean laDaHuy() {
         return TRANG_THAI_DA_HUY.equals(this.trangThai);
     }
@@ -116,11 +83,6 @@ public class DonHang {
         this.ngayTao = ngayTao;
     }
 
-    /**
-     * Ngay gui don toi Site.
-     *
-     * @return ngay gui; {@code null} neu don chua gui (Nhap / Dang xu ly)
-     */
     public Date getNgayGui() {
         return ngayGui;
     }

@@ -1,12 +1,4 @@
-// ============================================================
 // Tac gia    : Nguyen Duc Toan - 20235846
-// Ten file   : DonHangDAO.java
-// Goi        : dataaccess (tang DataAccess)
-// Mo ta      : Ban trien khai cua IDonHangDAO voi du lieu gia lap (mock data).
-//              Khop Bieu do lop thiet ke BT6: DonHangDAO ..|> IDonHangDAO.
-//              La cong duy nhat xuong tang Database (muc 14 SRS).
-// Phu thuoc  : dataaccess.IDonHangDAO, domainmodel.DonHang, domainmodel.Site
-// ============================================================
 package dataaccess;
 
 import java.util.ArrayList;
@@ -20,13 +12,6 @@ import java.util.Map;
 import domainmodel.DonHang;
 import domainmodel.Site;
 
-/**
- * Trien khai IDonHangDAO bang du lieu gia lap trong bo nho.
- *
- * <p>Tuong ung class DonHangDAO trong Bieu do lop BT6. Lop nay thay the
- * cho viec ket noi CSDL that; nho DIP (Service phu thuoc IDonHangDAO),
- * sau nay co the doi sang ban trien khai dung MySQL ma khong sua Service.</p>
- */
 public class DonHangDAO implements IDonHangDAO {
 
     private final List<DonHang> dsDonHang;
@@ -67,8 +52,6 @@ public class DonHangDAO implements IDonHangDAO {
         // Don da gui - giao bang Hang khong (co ngay gui that)
         dsDonHang.add(new DonHang("DH-2025-004", "SITE-CN04", "China Manufacturing Group",
                 2, Site.PT_HANG_KHONG, ngayTruoc(5), ngayTruoc(3), "DA_GUI"));
-
-        // Don DA HUY - phuc vu luong thay the 7a (xem chi tiet don da huy)
         dsDonHang.add(new DonHang("DH-2025-005", "SITE-SG05", "Singapore Trading Hub",
                 1, Site.PT_TAU, ngayTruoc(15), null, DonHang.TRANG_THAI_DA_HUY));
     }
@@ -133,7 +116,6 @@ public class DonHangDAO implements IDonHangDAO {
         return dsSite.get(maSite);
     }
 
-    /** Kiem tra don hang co chua tu khoa (theo ma don / ma site / ten site). */
     private boolean khopTuKhoa(DonHang dh, String tuKhoa) {
         if (tuKhoa.isEmpty()) {
             return true;
@@ -143,7 +125,6 @@ public class DonHangDAO implements IDonHangDAO {
                 || dh.getTenSite().toLowerCase().contains(tuKhoa);
     }
 
-    /** Kiem tra mot truong co khop gia tri loc khong (null/rong = bo qua loc). */
     private boolean khopGiaTriLoc(String giaTriThucTe, String giaTriLoc) {
         if (giaTriLoc == null || giaTriLoc.trim().isEmpty()) {
             return true;
@@ -151,7 +132,6 @@ public class DonHangDAO implements IDonHangDAO {
         return giaTriLoc.equals(giaTriThucTe);
     }
 
-    /** Tien ich: tra ve ngay cach hom nay {@code soNgay} ve truoc. */
     private Date ngayTruoc(int soNgay) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, -soNgay);

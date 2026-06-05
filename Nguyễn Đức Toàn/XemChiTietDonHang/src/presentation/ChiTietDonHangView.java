@@ -1,12 +1,4 @@
-// ============================================================
 // Tac gia    : Nguyen Duc Toan - 20235846
-// Ten file   : ChiTietDonHangView.java
-// Goi        : presentation (tang Presentation)
-// Mo ta      : Lop bien (boundary) hien thi Man hinh 3 - Chi tiet don hang
-//              (muc 7.8 SRS). Nhan du lieu qua ChiTietDonHangDTO (BT6),
-//              khong nhan entity tho. Khop Bieu do lop thiet ke BT6.
-// Phu thuoc  : businesslogic.ChiTietDonHangDTO, domainmodel.*, javax.swing
-// ============================================================
 package presentation;
 
 import java.awt.BorderLayout;
@@ -30,19 +22,11 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
 import businesslogic.ChiTietDonHangDTO;
+import businesslogic.DonHangController;
 import domainmodel.DonHang;
 import domainmodel.MatHangDonHang;
 import domainmodel.Site;
 
-/**
- * Man hinh chi tiet don hang (Man hinh 3 - muc 7.8 SRS).
- *
- * <p>Tuong ung class &lt;&lt;boundary&gt;&gt; ChiTietDonHangView trong Bieu do lop BT6:</p>
- * <ul>
- *   <li>hienThiChiTietDonHang(chiTiet: ChiTietDonHangDTO): void</li>
- *   <li>quayLaiDanhSach(): void</li>
- * </ul>
- */
 public class ChiTietDonHangView extends JDialog {
 
     private static final long serialVersionUID = 1L;
@@ -58,17 +42,18 @@ public class ChiTietDonHangView extends JDialog {
     private static final Font FONT_VALUE = new Font("Segoe UI", Font.PLAIN, 13);
     private static final Font FONT_BUTTON = new Font("Segoe UI", Font.BOLD, 13);
 
-    /** Hien thi khi khong co du lieu (vd: ngay gui don) - muc 7.11 SRS. */
     private static final String GIA_TRI_TRONG = "\u2014";
 
     private final SimpleDateFormat dinhDangNgay = new SimpleDateFormat("dd/MM/yyyy");
 
+    private final transient DonHangController controller;
     private final JPanel panelThongTinChung;
     private final JTable bangMatHang;
     private final DefaultTableModel modelMatHang;
 
-    public ChiTietDonHangView(Frame chuSoHuu) {
+    public ChiTietDonHangView(Frame chuSoHuu, DonHangController controller) {
         super(chuSoHuu, "Chi tiet don hang", true);
+        this.controller = controller;
 
         this.panelThongTinChung = new JPanel(new GridLayout(0, 2, 12, 8));
         this.modelMatHang = new DefaultTableModel(
@@ -122,8 +107,6 @@ public class ChiTietDonHangView extends JDialog {
         noiDung.add(cardMatHang, BorderLayout.CENTER);
 
         goc.add(noiDung, BorderLayout.CENTER);
-
-        // Nut quay lai (muc 7.8 SRS)
         JPanel chanTrang = new JPanel(new BorderLayout());
         chanTrang.setBackground(BG_COLOR);
         chanTrang.setBorder(new EmptyBorder(0, 24, 16, 24));
@@ -141,14 +124,6 @@ public class ChiTietDonHangView extends JDialog {
         add(goc);
     }
 
-    /**
-     * Hien thi chi tiet don hang tu DTO (Man hinh 3).
-     *
-     * <p>Tuong ung hienThiChiTietDonHang(chiTiet: ChiTietDonHangDTO): void
-     * trong Bieu do lop BT6.</p>
-     *
-     * @param chiTiet DTO chi tiet don hang (khong null)
-     */
     public void hienThiChiTietDonHang(ChiTietDonHangDTO chiTiet) {
         DonHang donHang = chiTiet.getDonHang();
         Site site = chiTiet.getSite();
@@ -161,7 +136,6 @@ public class ChiTietDonHangView extends JDialog {
         themDongThongTin("Phuong tien VT:", nhanPhuongTien(donHang.getPhuongTienVC()));
         themDongThongTin("So ngay van chuyen:", chiTiet.getSoNgayVanChuyen() + " ngay");
         themDongThongTin("Ngay tao don:", dinhDangNgay.format(donHang.getNgayTao()));
-        // Ngay gui don: hien "—" neu chua gui (Nhap / Dang xu ly) - muc 7.11 SRS
         String ngayGui = (donHang.getNgayGui() == null)
                 ? GIA_TRI_TRONG
                 : dinhDangNgay.format(donHang.getNgayGui());
@@ -186,12 +160,8 @@ public class ChiTietDonHangView extends JDialog {
         setVisible(true);
     }
 
-    /**
-     * Dong man hinh chi tiet, quay ve Man hinh danh sach (luong chinh buoc 9).
-     *
-     * <p>Tuong ung quayLaiDanhSach(): void trong Bieu do lop BT6.</p>
-     */
     public void quayLaiDanhSach() {
+        controller.xacNhanVaQuayLai();
         dispose();
     }
 
@@ -236,7 +206,6 @@ public class ChiTietDonHangView extends JDialog {
         return table;
     }
 
-    /** Doi ma trang thai sang nhan hien thi (muc 7.11 SRS). */
     private String nhanTrangThai(String maTrangThai) {
         if (maTrangThai == null) {
             return "";
@@ -255,7 +224,6 @@ public class ChiTietDonHangView extends JDialog {
         }
     }
 
-    /** Doi ma phuong tien sang nhan hien thi (muc 7.11 SRS). */
     private String nhanPhuongTien(String maPhuongTien) {
         if (Site.PT_TAU.equals(maPhuongTien)) {
             return "Tau";
