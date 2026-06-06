@@ -12,7 +12,7 @@ import domainmodel.Site;
 
 public class DonHangService {
 
-    public static final int PAGE_SIZE_MAC_DINH = 10;
+    public static final int PAGE_SIZE_MAC_DINH = 20;
 
     private final IDonHangDAO donHangDAO;
     private final MatHangDonHangDAO matHangDAO;

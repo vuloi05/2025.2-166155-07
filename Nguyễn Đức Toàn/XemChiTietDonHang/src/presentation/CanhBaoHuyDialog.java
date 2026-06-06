@@ -25,68 +25,89 @@ public class CanhBaoHuyDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Color DANGER_COLOR = new Color(244, 67, 54);
-    private static final Color TEXT_PRIMARY = new Color(33, 37, 41);
-    private static final Color BG_COLOR = Color.WHITE;
-    private static final Font FONT_TITLE = new Font("Segoe UI", Font.BOLD, 18);
-    private static final Font FONT_BODY = new Font("Segoe UI", Font.PLAIN, 14);
-    private static final Font FONT_BUTTON = new Font("Segoe UI", Font.BOLD, 14);
-
     private final transient DonHangController controller;
     private final JLabel lblThongBao;
 
     public CanhBaoHuyDialog(Frame chuSoHuu, DonHangController controller) {
-        super(chuSoHuu, "Canh bao", true);
+        super(chuSoHuu, true);
         this.controller = controller;
         this.lblThongBao = new JLabel("", SwingConstants.CENTER);
         khoiTaoGiaoDien();
     }
 
     private void khoiTaoGiaoDien() {
-        setSize(480, 320);
+        setSize(520, 340);
         setLocationRelativeTo(getOwner());
         setResizable(false);
 
+        JPanel goc = new JPanel(new BorderLayout());
+        goc.setBackground(Color.WHITE);
+
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(Color.WHITE);
+        header.setBorder(new EmptyBorder(12, 16, 8, 16));
+        JLabel lblHeader = new JLabel("Cảnh báo");
+        lblHeader.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblHeader.setForeground(GroupUiTheme.TEXT_PRIMARY);
+        header.add(lblHeader, BorderLayout.WEST);
+
+        JButton btnDong = new JButton("✕");
+        btnDong.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnDong.setForeground(GroupUiTheme.TEXT_SECONDARY);
+        btnDong.setBackground(Color.WHITE);
+        btnDong.setBorderPainted(false);
+        btnDong.setFocusPainted(false);
+        btnDong.setOpaque(false);
+        btnDong.addActionListener(e -> xacNhanVaQuayLai());
+        header.add(btnDong, BorderLayout.EAST);
+        goc.add(header, BorderLayout.NORTH);
+
         JPanel noiDung = new JPanel();
         noiDung.setLayout(new BoxLayout(noiDung, BoxLayout.Y_AXIS));
-        noiDung.setBackground(BG_COLOR);
-        noiDung.setBorder(new EmptyBorder(28, 24, 20, 24));
-        JLabel lblIcon = new JLabel("\u26A0", SwingConstants.CENTER);
-        lblIcon.setFont(new Font("Segoe UI", Font.PLAIN, 48));
-        lblIcon.setForeground(DANGER_COLOR);
+        noiDung.setBackground(Color.WHITE);
+        noiDung.setBorder(new EmptyBorder(8, 24, 8, 24));
+
+        JLabel lblIcon = new JLabel("\u25A1", SwingConstants.CENTER);
+        lblIcon.setFont(new Font("Segoe UI", Font.PLAIN, 56));
+        lblIcon.setForeground(GroupUiTheme.DANGER_COLOR);
+        lblIcon.setBorder(BorderFactory.createLineBorder(GroupUiTheme.DANGER_COLOR, 3));
         lblIcon.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblIcon.setPreferredSize(new Dimension(64, 64));
+        lblIcon.setMaximumSize(new Dimension(64, 64));
         noiDung.add(lblIcon);
 
-        noiDung.add(Box.createVerticalStrut(10));
+        noiDung.add(Box.createVerticalStrut(16));
 
-        JLabel lblTieuDe = new JLabel("Khong the xem chi tiet", SwingConstants.CENTER);
-        lblTieuDe.setFont(FONT_TITLE);
-        lblTieuDe.setForeground(TEXT_PRIMARY);
+        JLabel lblTieuDe = new JLabel("Không thể xem chi tiết", SwingConstants.CENTER);
+        lblTieuDe.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblTieuDe.setForeground(GroupUiTheme.TEXT_PRIMARY);
         lblTieuDe.setAlignmentX(Component.CENTER_ALIGNMENT);
         noiDung.add(lblTieuDe);
 
         noiDung.add(Box.createVerticalStrut(8));
 
-        lblThongBao.setFont(FONT_BODY);
-        lblThongBao.setForeground(TEXT_PRIMARY);
+        lblThongBao.setFont(GroupUiTheme.FONT_BODY);
+        lblThongBao.setForeground(GroupUiTheme.TEXT_PRIMARY);
         lblThongBao.setAlignmentX(Component.CENTER_ALIGNMENT);
         noiDung.add(lblThongBao);
-
-        // Day phan noi dung len tren, tranh dong chu cuoi bi nut che mat
         noiDung.add(Box.createVerticalGlue());
 
-        add(noiDung, BorderLayout.CENTER);
-        JPanel chanTrang = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 12));
-        chanTrang.setBackground(BG_COLOR);
-        JButton btnXacNhan = taoNut("Xac nhan & Quay lai", DANGER_COLOR);
+        goc.add(noiDung, BorderLayout.CENTER);
+
+        JPanel chanTrang = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 16));
+        chanTrang.setBackground(Color.WHITE);
+        chanTrang.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, GroupUiTheme.BORDER_COLOR));
+        JButton btnXacNhan = taoNut("Xác nhận & Quay lại", GroupUiTheme.DANGER_COLOR);
         btnXacNhan.addActionListener(e -> xacNhanVaQuayLai());
         chanTrang.add(btnXacNhan);
-        add(chanTrang, BorderLayout.SOUTH);
+        goc.add(chanTrang, BorderLayout.SOUTH);
+
+        setContentPane(goc);
     }
 
     public void hienThiCanhBaoDaHuy(String maDonHang) {
-        lblThongBao.setText("<html><div style='text-align:center;'>Don hang <b>"
-                + maDonHang + "</b> da bi huy,<br>khong the xem chi tiet.</div></html>");
+        lblThongBao.setText("<html><div style='text-align:center;'>Đơn hàng <b>"
+                + maDonHang + "</b> đã bị hủy,<br>không thể xem chi tiết.</div></html>");
         setVisible(true);
     }
 
@@ -97,13 +118,13 @@ public class CanhBaoHuyDialog extends JDialog {
 
     private JButton taoNut(String chu, Color mauNen) {
         JButton btn = new JButton(chu);
-        btn.setFont(FONT_BUTTON);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btn.setForeground(Color.WHITE);
         btn.setBackground(mauNen);
         btn.setFocusPainted(false);
         btn.setOpaque(true);
-        btn.setBorder(new EmptyBorder(8, 22, 8, 22));
-        btn.setPreferredSize(new Dimension(200, 40));
+        btn.setBorder(new EmptyBorder(10, 24, 10, 24));
+        btn.setPreferredSize(new Dimension(220, 44));
         return btn;
     }
 }

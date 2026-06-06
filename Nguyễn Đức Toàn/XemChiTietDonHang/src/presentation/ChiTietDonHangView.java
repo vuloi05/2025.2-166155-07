@@ -3,7 +3,7 @@ package presentation;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GridLayout;
@@ -19,7 +19,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 import businesslogic.ChiTietDonHangDTO;
 import businesslogic.DonHangController;
@@ -31,33 +30,21 @@ public class ChiTietDonHangView extends JDialog {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Color PRIMARY_COLOR = new Color(26, 35, 126);
-    private static final Color BG_COLOR = new Color(245, 247, 250);
-    private static final Color CARD_COLOR = Color.WHITE;
-    private static final Color TABLE_HEADER_BG = new Color(52, 58, 64);
-    private static final Color TEXT_PRIMARY = new Color(33, 37, 41);
-    private static final Color TEXT_SECONDARY = new Color(108, 117, 125);
-    private static final Font FONT_TITLE = new Font("Segoe UI", Font.BOLD, 18);
-    private static final Font FONT_LABEL = new Font("Segoe UI", Font.BOLD, 13);
-    private static final Font FONT_VALUE = new Font("Segoe UI", Font.PLAIN, 13);
-    private static final Font FONT_BUTTON = new Font("Segoe UI", Font.BOLD, 13);
-
     private static final String GIA_TRI_TRONG = "\u2014";
 
     private final SimpleDateFormat dinhDangNgay = new SimpleDateFormat("dd/MM/yyyy");
 
     private final transient DonHangController controller;
     private final JPanel panelThongTinChung;
-    private final JTable bangMatHang;
     private final DefaultTableModel modelMatHang;
 
     public ChiTietDonHangView(Frame chuSoHuu, DonHangController controller) {
-        super(chuSoHuu, "Chi tiet don hang", true);
+        super(chuSoHuu, true);
         this.controller = controller;
 
         this.panelThongTinChung = new JPanel(new GridLayout(0, 2, 12, 8));
         this.modelMatHang = new DefaultTableModel(
-                new String[] {"STT", "Ma hang", "Ten mat hang", "So luong dat", "Don vi", "Phuong tien VT"}, 0) {
+                new String[] {"STT", "Mã hàng", "Tên mặt hàng", "Số lượng đặt", "Đơn vị", "Phương tiện VT"}, 0) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -65,63 +52,67 @@ public class ChiTietDonHangView extends JDialog {
                 return false;
             }
         };
-        this.bangMatHang = taoBangMatHang(modelMatHang);
 
         khoiTaoGiaoDien();
     }
 
     private void khoiTaoGiaoDien() {
-        setSize(820, 600);
+        setUndecorated(false);
+        setSize(860, 620);
         setLocationRelativeTo(getOwner());
 
         JPanel goc = new JPanel(new BorderLayout());
-        goc.setBackground(BG_COLOR);
+        goc.setBackground(GroupUiTheme.BG_COLOR);
 
-        // Header
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(PRIMARY_COLOR);
+        header.setBackground(GroupUiTheme.PRIMARY_COLOR);
         header.setBorder(new EmptyBorder(14, 24, 14, 24));
-        JLabel lblTitle = new JLabel("CHI TIET DON HANG");
+
+        JLabel lblTitle = new JLabel("CHI TIẾT ĐƠN HÀNG");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblTitle.setForeground(Color.WHITE);
         header.add(lblTitle, BorderLayout.WEST);
+
+        JButton btnDong = new JButton("✕");
+        btnDong.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnDong.setForeground(Color.WHITE);
+        btnDong.setBackground(GroupUiTheme.PRIMARY_COLOR);
+        btnDong.setBorderPainted(false);
+        btnDong.setFocusPainted(false);
+        btnDong.setOpaque(false);
+        btnDong.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDong.addActionListener(e -> dispose());
+        header.add(btnDong, BorderLayout.EAST);
         goc.add(header, BorderLayout.NORTH);
 
-        // Noi dung
         JPanel noiDung = new JPanel(new BorderLayout(0, 14));
-        noiDung.setBackground(BG_COLOR);
+        noiDung.setBackground(GroupUiTheme.BG_COLOR);
         noiDung.setBorder(new EmptyBorder(16, 24, 16, 24));
 
-        // Card thong tin chung
-        JPanel cardChung = taoCard("Thong tin chung");
-        panelThongTinChung.setBackground(CARD_COLOR);
+        JPanel cardChung = taoCard("Thông tin chung");
+        panelThongTinChung.setBackground(GroupUiTheme.CARD_COLOR);
         cardChung.add(panelThongTinChung, BorderLayout.CENTER);
         noiDung.add(cardChung, BorderLayout.NORTH);
 
-        // Card danh sach mat hang
-        JPanel cardMatHang = taoCard("Danh sach mat hang");
+        JPanel cardMatHang = taoCard("Danh sách mặt hàng");
+        JTable bangMatHang = GroupUiTheme.createStyledTable(modelMatHang);
         JScrollPane scroll = new JScrollPane(bangMatHang);
-        scroll.setBorder(BorderFactory.createLineBorder(new Color(222, 226, 230)));
-        scroll.getViewport().setBackground(CARD_COLOR);
+        scroll.setBorder(BorderFactory.createLineBorder(GroupUiTheme.BORDER_COLOR));
+        scroll.getViewport().setBackground(GroupUiTheme.CARD_COLOR);
         cardMatHang.add(scroll, BorderLayout.CENTER);
         noiDung.add(cardMatHang, BorderLayout.CENTER);
 
         goc.add(noiDung, BorderLayout.CENTER);
-        JPanel chanTrang = new JPanel(new BorderLayout());
-        chanTrang.setBackground(BG_COLOR);
+
+        JPanel chanTrang = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        chanTrang.setBackground(GroupUiTheme.BG_COLOR);
         chanTrang.setBorder(new EmptyBorder(0, 24, 16, 24));
-        JButton btnQuayLai = new JButton("\u2190 Quay lai danh sach");
-        btnQuayLai.setFont(FONT_BUTTON);
-        btnQuayLai.setForeground(Color.WHITE);
-        btnQuayLai.setBackground(PRIMARY_COLOR);
-        btnQuayLai.setOpaque(true);
-        btnQuayLai.setFocusPainted(false);
-        btnQuayLai.setBorder(new EmptyBorder(8, 20, 8, 20));
+        JButton btnQuayLai = GroupUiTheme.createPrimaryButton("← Quay lại danh sách");
         btnQuayLai.addActionListener(e -> quayLaiDanhSach());
-        chanTrang.add(btnQuayLai, BorderLayout.WEST);
+        chanTrang.add(btnQuayLai);
         goc.add(chanTrang, BorderLayout.SOUTH);
 
-        add(goc);
+        setContentPane(goc);
     }
 
     public void hienThiChiTietDonHang(ChiTietDonHangDTO chiTiet) {
@@ -129,17 +120,17 @@ public class ChiTietDonHangView extends JDialog {
         Site site = chiTiet.getSite();
 
         panelThongTinChung.removeAll();
-        themDongThongTin("Ma don hang:", donHang.getMaDonHang());
-        themDongThongTin("Trang thai:", nhanTrangThai(donHang.getTrangThai()));
-        themDongThongTin("Ma Site:", donHang.getMaSite());
-        themDongThongTin("Ten Site:", site != null ? site.getTenSite() : donHang.getTenSite());
-        themDongThongTin("Phuong tien VT:", nhanPhuongTien(donHang.getPhuongTienVC()));
-        themDongThongTin("So ngay van chuyen:", chiTiet.getSoNgayVanChuyen() + " ngay");
-        themDongThongTin("Ngay tao don:", dinhDangNgay.format(donHang.getNgayTao()));
+        themDongThongTin("Mã đơn hàng:", donHang.getMaDonHang());
+        themDongThongTin("Trạng thái:", UiLabels.trangThai(donHang.getTrangThai()));
+        themDongThongTin("Mã Site:", donHang.getMaSite());
+        themDongThongTin("Tên Site:", site != null ? site.getTenSite() : donHang.getTenSite());
+        themDongThongTin("Phương tiện VT:", UiLabels.phuongTien(donHang.getPhuongTienVC()));
+        themDongThongTin("Số ngày vận chuyển:", chiTiet.getSoNgayVanChuyen() + " ngày");
+        themDongThongTin("Ngày tạo đơn:", dinhDangNgay.format(donHang.getNgayTao()));
         String ngayGui = (donHang.getNgayGui() == null)
                 ? GIA_TRI_TRONG
                 : dinhDangNgay.format(donHang.getNgayGui());
-        themDongThongTin("Ngay gui don:", ngayGui);
+        themDongThongTin("Ngày gửi đơn:", ngayGui);
         panelThongTinChung.revalidate();
         panelThongTinChung.repaint();
 
@@ -153,7 +144,7 @@ public class ChiTietDonHangView extends JDialog {
                     mh.getTenMatHang(),
                     mh.getSoLuong(),
                     mh.getDonVi(),
-                    nhanPhuongTien(mh.getPhuongTienVC())
+                    UiLabels.phuongTien(mh.getPhuongTienVC())
             });
         }
 
@@ -167,12 +158,12 @@ public class ChiTietDonHangView extends JDialog {
 
     private void themDongThongTin(String nhan, String giaTri) {
         JLabel lblNhan = new JLabel(nhan);
-        lblNhan.setFont(FONT_LABEL);
-        lblNhan.setForeground(TEXT_SECONDARY);
+        lblNhan.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblNhan.setForeground(GroupUiTheme.TEXT_SECONDARY);
 
         JLabel lblGiaTri = new JLabel(giaTri);
-        lblGiaTri.setFont(FONT_VALUE);
-        lblGiaTri.setForeground(TEXT_PRIMARY);
+        lblGiaTri.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        lblGiaTri.setForeground(GroupUiTheme.TEXT_PRIMARY);
 
         panelThongTinChung.add(lblNhan);
         panelThongTinChung.add(lblGiaTri);
@@ -180,57 +171,15 @@ public class ChiTietDonHangView extends JDialog {
 
     private JPanel taoCard(String tieuDe) {
         JPanel card = new JPanel(new BorderLayout(0, 10));
-        card.setBackground(CARD_COLOR);
+        card.setBackground(GroupUiTheme.CARD_COLOR);
         card.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(222, 226, 230)),
+                BorderFactory.createLineBorder(GroupUiTheme.BORDER_COLOR),
                 new EmptyBorder(12, 16, 12, 16)));
 
         JLabel lbl = new JLabel(tieuDe);
-        lbl.setFont(FONT_TITLE);
-        lbl.setForeground(PRIMARY_COLOR);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lbl.setForeground(GroupUiTheme.PRIMARY_COLOR);
         card.add(lbl, BorderLayout.NORTH);
         return card;
-    }
-
-    private JTable taoBangMatHang(DefaultTableModel model) {
-        JTable table = new JTable(model);
-        table.setFont(FONT_VALUE);
-        table.setRowHeight(28);
-        table.setGridColor(new Color(233, 236, 239));
-        JTableHeader header = table.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(TABLE_HEADER_BG);
-        header.setForeground(Color.WHITE);
-        header.setReorderingAllowed(false);
-        header.setPreferredSize(new Dimension(0, 34));
-        return table;
-    }
-
-    private String nhanTrangThai(String maTrangThai) {
-        if (maTrangThai == null) {
-            return "";
-        }
-        switch (maTrangThai) {
-            case "NHAP":
-                return "Nhap";
-            case "DANG_XU_LY":
-                return "Dang xu ly";
-            case "DA_GUI":
-                return "Da gui";
-            case DonHang.TRANG_THAI_DA_HUY:
-                return "Da huy";
-            default:
-                return maTrangThai;
-        }
-    }
-
-    private String nhanPhuongTien(String maPhuongTien) {
-        if (Site.PT_TAU.equals(maPhuongTien)) {
-            return "Tau";
-        }
-        if (Site.PT_HANG_KHONG.equals(maPhuongTien)) {
-            return "Hang khong";
-        }
-        return maPhuongTien != null ? maPhuongTien : "";
     }
 }

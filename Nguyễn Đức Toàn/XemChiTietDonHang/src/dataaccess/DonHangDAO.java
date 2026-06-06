@@ -2,7 +2,6 @@
 package dataaccess;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -25,11 +24,12 @@ public class DonHangDAO implements IDonHangDAO {
     }
 
     private void khoiTaoSite() {
-        themSite(new Site("SITE-TW01", "Taiwan Components Co.", 30, 7));
-        themSite(new Site("SITE-JP02", "Japan Electronics Ltd.", 25, 5));
-        themSite(new Site("SITE-KR03", "Korea Tech Supply", 28, 6));
-        themSite(new Site("SITE-CN04", "China Manufacturing Group", 20, 4));
-        themSite(new Site("SITE-SG05", "Singapore Trading Hub", 22, 5));
+        themSite(new Site("S01", "Site Nhật Bản", 25, 5));
+        themSite(new Site("S02", "Site S02", 5, 5));
+        themSite(new Site("S03", "Site Singapore", 22, 5));
+        themSite(new Site("S04", "Site Đài Loan", 30, 7));
+        themSite(new Site("SITE-TW02", "Nhà kho Đài Bắc", 28, 6));
+        themSite(new Site("SITE-JP01", "Site Nhật Bản 01", 25, 5));
     }
 
     private void themSite(Site site) {
@@ -37,23 +37,41 @@ public class DonHangDAO implements IDonHangDAO {
     }
 
     private void khoiTaoDonHang() {
-        // Don da gui - giao bang Tau (co ngay gui that)
-        dsDonHang.add(new DonHang("DH-2025-001", "SITE-TW01", "Taiwan Components Co.",
-                3, Site.PT_TAU, ngayTruoc(20), ngayTruoc(18), "DA_GUI"));
+        Date ngayTao = ngayCoDinh(2026, Calendar.JUNE, 6);
 
-        // Don dang xu ly - giao bang Hang khong (chua gui -> ngayGui = null)
-        dsDonHang.add(new DonHang("DH-2025-002", "SITE-JP02", "Japan Electronics Ltd.",
-                2, Site.PT_HANG_KHONG, ngayTruoc(12), null, "DANG_XU_LY"));
+        // 2 don Nhap (Yeu cau moi)
+        dsDonHang.add(new DonHang("DH-2026-001", "S04", "Site Đài Loan",
+                1, Site.PT_TAU, ngayTao, null, "NHAP"));
+        dsDonHang.add(new DonHang("DH-0001", "S03", "Site Singapore",
+                2, Site.PT_HANG_KHONG, ngayTao, null, "NHAP"));
 
-        // Don nhap (chua gui) - giao bang Tau (ngayGui = null)
-        dsDonHang.add(new DonHang("DH-2025-003", "SITE-KR03", "Korea Tech Supply",
-                1, Site.PT_TAU, ngayTruoc(8), null, "NHAP"));
+        // 7 don Dang xu ly
+        dsDonHang.add(new DonHang("DH-2026-002", "S01", "Site Nhật Bản",
+                2, Site.PT_HANG_KHONG, ngayTao, null, "DANG_XU_LY"));
+        dsDonHang.add(new DonHang("DH-2026-004", "S04", "Site Đài Loan",
+                1, Site.PT_TAU, ngayTao, null, "DANG_XU_LY"));
+        dsDonHang.add(new DonHang("DH-2026-005", "SITE-TW02", "Nhà kho Đài Bắc",
+                2, Site.PT_TAU, ngayTao, null, "DANG_XU_LY"));
+        dsDonHang.add(new DonHang("DH-2026-006", "SITE-JP01", "Site Nhật Bản 01",
+                1, Site.PT_HANG_KHONG, ngayTao, null, "DANG_XU_LY"));
+        dsDonHang.add(new DonHang("DH-2026-007", "S02", "Site S02",
+                2, Site.PT_TAU, ngayTao, null, "DANG_XU_LY"));
+        dsDonHang.add(new DonHang("DH-2026-009", "S01", "Site Nhật Bản",
+                1, Site.PT_TAU, ngayTao, null, "DANG_XU_LY"));
+        dsDonHang.add(new DonHang("DH-2026-010", "S03", "Site Singapore",
+                2, Site.PT_HANG_KHONG, ngayTao, null, "DANG_XU_LY"));
 
-        // Don da gui - giao bang Hang khong (co ngay gui that)
-        dsDonHang.add(new DonHang("DH-2025-004", "SITE-CN04", "China Manufacturing Group",
-                2, Site.PT_HANG_KHONG, ngayTruoc(5), ngayTruoc(3), "DA_GUI"));
-        dsDonHang.add(new DonHang("DH-2025-005", "SITE-SG05", "Singapore Trading Hub",
-                1, Site.PT_TAU, ngayTruoc(15), null, DonHang.TRANG_THAI_DA_HUY));
+        // 2 don Da xu ly
+        dsDonHang.add(new DonHang("DH-2026-003", "S02", "Site S02",
+                1, Site.PT_TAU, ngayTao, ngayTao, "DA_GUI"));
+        dsDonHang.add(new DonHang("DH-2026-011", "S04", "Site Đài Loan",
+                1, Site.PT_HANG_KHONG, ngayTao, ngayTao, "DA_GUI"));
+
+        // 2 don Da huy
+        dsDonHang.add(new DonHang("DH-2026-008", "S04", "Site Đài Loan",
+                1, Site.PT_TAU, ngayTao, null, DonHang.TRANG_THAI_DA_HUY));
+        dsDonHang.add(new DonHang("DH-2026-012", "S01", "Site Nhật Bản",
+                1, Site.PT_HANG_KHONG, ngayTao, null, DonHang.TRANG_THAI_DA_HUY));
     }
 
     @Override
@@ -120,21 +138,26 @@ public class DonHangDAO implements IDonHangDAO {
         if (tuKhoa.isEmpty()) {
             return true;
         }
-        return dh.getMaDonHang().toLowerCase().contains(tuKhoa)
-                || dh.getMaSite().toLowerCase().contains(tuKhoa)
-                || dh.getTenSite().toLowerCase().contains(tuKhoa);
+        return chua(dh.getMaDonHang(), tuKhoa)
+                || chua(dh.getMaSite(), tuKhoa)
+                || chua(dh.getTenSite(), tuKhoa);
     }
 
-    private boolean khopGiaTriLoc(String giaTriThucTe, String giaTriLoc) {
-        if (giaTriLoc == null || giaTriLoc.trim().isEmpty()) {
+    private boolean chua(String giaTri, String tuKhoa) {
+        return giaTri != null && giaTri.toLowerCase().contains(tuKhoa);
+    }
+
+    private boolean khopGiaTriLoc(String giaTri, String loc) {
+        if (loc == null || loc.isEmpty()) {
             return true;
         }
-        return giaTriLoc.equals(giaTriThucTe);
+        return loc.equals(giaTri);
     }
 
-    private Date ngayTruoc(int soNgay) {
+    private Date ngayCoDinh(int nam, int thang, int ngay) {
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, -soNgay);
+        cal.set(nam, thang, ngay, 0, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
 }
